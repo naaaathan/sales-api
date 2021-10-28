@@ -4,6 +4,7 @@ import com.ppi.salesapi.model.Address;
 import com.ppi.salesapi.model.Payment;
 import com.ppi.salesapi.model.Product;
 import com.ppi.salesapi.model.ShopCart;
+import com.ppi.salesapi.repository.AddressRepository;
 import com.ppi.salesapi.repository.PaymentRepository;
 import com.ppi.salesapi.repository.ShopCartRepository;
 import com.ppi.salesapi.service.ProductService;
@@ -21,6 +22,9 @@ public class ShopCartServiceImpl implements ShopCartService {
     private ShopCartRepository shopCartRepository;
 
     @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
     private ProductService productService;
 
     @Autowired
@@ -31,6 +35,8 @@ public class ShopCartServiceImpl implements ShopCartService {
     public Long createShopCart() {
 
         ShopCart shopCart = new ShopCart();
+
+        shopCartRepository.saveAndFlush(shopCart);
 
         return shopCart.getId();
 
@@ -132,6 +138,9 @@ public class ShopCartServiceImpl implements ShopCartService {
         addressCart.setState(address.getState());
 
         shopCart.setAddress(addressCart);
+
+        addressRepository.saveAndFlush(addressCart);
+        shopCartRepository.saveAndFlush(shopCart);
 
     }
 

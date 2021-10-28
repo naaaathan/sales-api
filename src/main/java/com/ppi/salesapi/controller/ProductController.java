@@ -22,18 +22,24 @@ public class ProductController {
         return productService.findAll();
     }
 
-    @GetMapping(value = "/{name}")
+    @GetMapping(value = "/id/{id}")
+    public Product findProductById(@PathVariable(value = "id") Long id) {
+        return productService.findProductById(id);
+    }
+
+
+    @GetMapping(value = "/name/{name}")
     private List<Product> findByName(@PathVariable("name") String name) {
 
         return productService.findProductsByName(name);
 
     }
 
-    @PostMapping
+    @PostMapping(value = "/addProduct")
     @ResponseStatus(HttpStatus.CREATED)
-    private void create(@RequestBody Product product) {
+    private Long create(@RequestBody Product product) {
 
-        productService.createProduct(product);
+        return productService.createProduct(product);
 
     }
 
@@ -43,16 +49,13 @@ public class ProductController {
 
         productService.updateProduct(id, product);
 
-
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     private void delete(@PathVariable("id") Long id) {
 
-
         productService.delete(id);
-
 
     }
 

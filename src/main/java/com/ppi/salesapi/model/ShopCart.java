@@ -18,11 +18,11 @@ public class ShopCart implements Serializable {
     @JoinColumn
     private List<Product> product;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn
     private Payment payment;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn
     private Address address;
 

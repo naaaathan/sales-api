@@ -12,7 +12,7 @@ public interface ProductService {
 
     List<Product> findAll();
 
-    void createProduct(Product product);
+    Long createProduct(Product product);
 
     void updateProduct(Long id, Product product);
 

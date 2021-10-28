@@ -1,0 +1,32 @@
+{
+  "product": [
+    {
+      "name": "Celular Smartphone",
+      "description": "Celular Smartphone de última geração",
+      "image": "pathToImage",
+      "price": 1555.55,
+      "promoPrice": 1500.00
+    },
+    {
+      "name": "Notebook Acer Gaming",
+      "description": "Notebook de última geração com placa de vídeo integrada",
+      "image": "pathToImage",
+      "price": 1555.55,
+      "promoPrice": 1500.00
+    },
+    {
+      "name": "TV LCD",
+      "description": "TV LCD 48 polegadas, resolução 4K",
+      "image": "pathToImage",
+      "price": 2555.55,
+      "promoPrice": 2500.00
+    }
+  ],
+  "address": {
+    "state": "MG",
+    "city": "Uberlândia",
+    "street": "Av. Joao Naves de Avila",
+    "number": "1670",
+    "additional": "APTO 10"
+  }
+}
