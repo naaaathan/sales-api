@@ -17,16 +17,9 @@ public class PaymentServiceImpl implements PaymentService {
 
         Assert.notNull(payment,"Payment cannot be null");
 
-        Payment persistedPayment = new Payment();
-
-        persistedPayment.setNumber(payment.getNumber());
-        persistedPayment.setCvv(payment.getCvv());
-        persistedPayment.setName(payment.getName());
-        persistedPayment.setDate(payment.getDate());
-
         paymentRepository.saveAndFlush(payment);
 
-        return persistedPayment.getId();
+        return payment.getId();
 
     }
 

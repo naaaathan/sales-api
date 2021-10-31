@@ -2,7 +2,6 @@ package com.ppi.salesapi.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity
 @Table
@@ -21,7 +20,7 @@ public class Payment implements Serializable {
     private String cvv;
 
     @Column
-    private Date date;
+    private String date;
 
     @Column
     private String name;
@@ -50,11 +49,11 @@ public class Payment implements Serializable {
         this.cvv = cvv;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

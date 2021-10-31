@@ -28,5 +28,13 @@
     "street": "Av. Joao Naves de Avila",
     "number": "1670",
     "additional": "APTO 10"
+  },
+  "payment": {
+
+    "number": "091830921382",
+    "cvv": "721",
+    "date": "26/10/2025",
+    "name": "Jose Osvaldo Solimoes"
+
   }
 }

@@ -6,13 +6,16 @@ import java.util.List;
 
 @Entity
 @Table
-public class ShopCart implements Serializable {
+public class Sell implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column
+    private double totalValue;
 
     @OneToMany(targetEntity = Product.class, fetch = FetchType.EAGER)
     @JoinColumn
@@ -25,6 +28,10 @@ public class ShopCart implements Serializable {
     @OneToOne
     @JoinColumn
     private Address address;
+
+    @OneToOne
+    @JoinColumn
+    private User user;
 
     public void setId(Long id) {
         this.id = id;
@@ -57,6 +64,22 @@ public class ShopCart implements Serializable {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public double getTotalValue() {
+        return totalValue;
+    }
+
+    public void setTotalValue(double totalValue) {
+        this.totalValue = totalValue;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

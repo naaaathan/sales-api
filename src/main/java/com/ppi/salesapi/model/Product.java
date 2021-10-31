@@ -29,9 +29,9 @@ public class Product implements Serializable {
     @Column
     private double promoPrice;
 
-    @ManyToOne(targetEntity = ShopCart.class)
+    @ManyToOne(targetEntity = Sell.class)
     @JoinColumn
-    private ShopCart shopCart;
+    private Sell shopCart;
 
     private void setId(Long id) {
         this.id = id;
@@ -82,11 +82,11 @@ public class Product implements Serializable {
         this.promoPrice = promoPrice;
     }
 
-    public ShopCart getShopCart() {
+    public Sell getShopCart() {
         return shopCart;
     }
 
-    public void setShopCart(ShopCart shopCart) {
+    public void setShopCart(Sell shopCart) {
         this.shopCart = shopCart;
     }
 

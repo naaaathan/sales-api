@@ -3,12 +3,12 @@ package com.ppi.salesapi.service.impl;
 import com.ppi.salesapi.model.Address;
 import com.ppi.salesapi.model.Payment;
 import com.ppi.salesapi.model.Product;
-import com.ppi.salesapi.model.ShopCart;
+import com.ppi.salesapi.model.Sell;
 import com.ppi.salesapi.repository.AddressRepository;
 import com.ppi.salesapi.repository.PaymentRepository;
-import com.ppi.salesapi.repository.ShopCartRepository;
+import com.ppi.salesapi.repository.SellRepository;
 import com.ppi.salesapi.service.ProductService;
-import com.ppi.salesapi.service.ShopCartService;
+import com.ppi.salesapi.service.SellService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -16,10 +16,10 @@ import org.springframework.util.Assert;
 import java.util.List;
 
 @Service
-public class ShopCartServiceImpl implements ShopCartService {
+public class SellServiceImpl implements SellService {
 
     @Autowired
-    private ShopCartRepository shopCartRepository;
+    private SellRepository sellRepository;
 
     @Autowired
     private AddressRepository addressRepository;
@@ -29,18 +29,8 @@ public class ShopCartServiceImpl implements ShopCartService {
 
     @Autowired
     private PaymentRepository paymentRepository;
+    //SOMA DO CARRINHO , ID DO USUÁRIO
 
-
-    @Override
-    public Long createShopCart() {
-
-        ShopCart shopCart = new ShopCart();
-
-        shopCartRepository.saveAndFlush(shopCart);
-
-        return shopCart.getId();
-
-    }
 
     @Override
     public void addProductToShopCart(Long idCart, Long idProduct) {
@@ -54,7 +44,7 @@ public class ShopCartServiceImpl implements ShopCartService {
             throw new RuntimeException("Product not found for id=" + idProduct);
         }
 
-        ShopCart shopCart = this.findShopCartById(idCart);
+        Sell shopCart = this.findSellById(idCart);
 
         if (shopCart == null) {
             throw new RuntimeException("ShopCart not found for id=" + idCart);
@@ -66,7 +56,7 @@ public class ShopCartServiceImpl implements ShopCartService {
 
         shopCart.setProduct(shopCartProducts);
 
-        shopCartRepository.saveAndFlush(shopCart);
+        sellRepository.saveAndFlush(shopCart);
 
     }
 
@@ -82,7 +72,7 @@ public class ShopCartServiceImpl implements ShopCartService {
             throw new RuntimeException("Payment not found for id=" + idPayment);
         }
 
-        ShopCart shopCart = shopCartRepository.findShopCartById(idCart);
+        Sell shopCart = sellRepository.findSellById(idCart);
 
         if (shopCart == null) {
             throw new RuntimeException("ShopCart not found for id=" + idCart);
@@ -90,7 +80,7 @@ public class ShopCartServiceImpl implements ShopCartService {
 
         shopCart.setPayment(payment);
 
-        shopCartRepository.saveAndFlush(shopCart);
+        sellRepository.saveAndFlush(shopCart);
     }
 
     public void addPaymentMethodToCart_(Payment payment, Long idCart) {
@@ -105,7 +95,7 @@ public class ShopCartServiceImpl implements ShopCartService {
         cartPayment.setCvv(payment.getCvv());
         cartPayment.setDate(payment.getDate());
 
-        ShopCart shopCart = shopCartRepository.findShopCartById(idCart);
+        Sell shopCart = sellRepository.findSellById(idCart);
 
         if (shopCart == null) {
             throw new RuntimeException("ShopCart not found for id=" + idCart);
@@ -113,7 +103,7 @@ public class ShopCartServiceImpl implements ShopCartService {
 
         shopCart.setPayment(cartPayment);
 
-        shopCartRepository.saveAndFlush(shopCart);
+        sellRepository.saveAndFlush(shopCart);
     }
 
 
@@ -123,7 +113,7 @@ public class ShopCartServiceImpl implements ShopCartService {
         Assert.notNull(idCart, "IdCart cannot be null");
         Assert.notNull(address, "Address cannot be null");
 
-        ShopCart shopCart = this.findShopCartById(idCart);
+        Sell shopCart = this.findSellById(idCart);
 
         if (shopCart == null) {
             throw new RuntimeException("shopCart not found for id=" + idCart);
@@ -140,16 +130,42 @@ public class ShopCartServiceImpl implements ShopCartService {
         shopCart.setAddress(addressCart);
 
         addressRepository.saveAndFlush(addressCart);
-        shopCartRepository.saveAndFlush(shopCart);
+        sellRepository.saveAndFlush(shopCart);
 
     }
 
 
-    public ShopCart findShopCartById(Long id) {
+    public Sell findSellById(Long id) {
 
-        return shopCartRepository.findShopCartById(id);
+        return sellRepository.findSellById(id);
+
+    }
+
+
+    public Long concludeSell(Sell sell) {
+
+        Assert.notNull(sell, "Sell Object cannot be null");
+        Assert.notNull(sell.getAddress(), "Address cannot be null");
+        Assert.notNull(sell.getPayment(), "Payment cannot be null");
+        Assert.notNull(sell.getProduct(), "Products cannot be null");
+        Assert.notNull(sell.getUser(), "User cannot be null");
+
+        addressRepository.saveAndFlush(sell.getAddress());
+        paymentRepository.saveAndFlush(sell.getPayment());
+
+        sell.setTotalValue(calculateTotalValue(sell));
+
+        sellRepository.saveAndFlush(sell);
+
+        return sell.getId();
+    }
+
+    private double calculateTotalValue(Sell sell) {
+
+        return sell.getProduct().stream().mapToDouble(Product::getPromoPrice).sum();
 
     }
 
 
 }
+

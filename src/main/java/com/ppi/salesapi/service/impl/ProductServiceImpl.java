@@ -42,7 +42,9 @@ public class ProductServiceImpl implements ProductService {
 
         Assert.notNull(product, "Product cannot be null");
 
-        return fillProductBasedOnAnotherAndSave(new Product(), product);
+        productRepository.saveAndFlush(product);
+
+        return product.getId();
     }
 
     public void updateProduct(Long id, Product product) {
@@ -65,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-    private Long fillProductBasedOnAnotherAndSave(Product baseProduct, Product targetProduct) {
+    private void fillProductBasedOnAnotherAndSave(Product baseProduct, Product targetProduct) {
 
         baseProduct.setName(targetProduct.getName());
         baseProduct.setDescription(targetProduct.getDescription());
@@ -75,8 +77,6 @@ public class ProductServiceImpl implements ProductService {
         baseProduct.setShopCart(targetProduct.getShopCart());
 
         productRepository.saveAndFlush(baseProduct);
-
-        return baseProduct.getId();
 
     }
 

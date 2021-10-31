@@ -1,13 +1,11 @@
 package com.ppi.salesapi.service;
 
 import com.ppi.salesapi.model.Address;
-import com.ppi.salesapi.model.ShopCart;
+import com.ppi.salesapi.model.Sell;
 
-public interface ShopCartService {
+public interface SellService {
 
-    ShopCart findShopCartById(Long id);
-
-    Long createShopCart();
+    Sell findSellById(Long id);
 
     void addProductToShopCart(Long idCart, Long idProduct);
 
