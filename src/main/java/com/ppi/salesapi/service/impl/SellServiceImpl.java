@@ -1,12 +1,10 @@
 package com.ppi.salesapi.service.impl;
 
-import com.ppi.salesapi.model.Address;
-import com.ppi.salesapi.model.Payment;
-import com.ppi.salesapi.model.Product;
-import com.ppi.salesapi.model.Sell;
+import com.ppi.salesapi.model.*;
 import com.ppi.salesapi.repository.AddressRepository;
 import com.ppi.salesapi.repository.PaymentRepository;
 import com.ppi.salesapi.repository.SellRepository;
+import com.ppi.salesapi.repository.UserRepository;
 import com.ppi.salesapi.service.ProductService;
 import com.ppi.salesapi.service.SellService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +27,9 @@ public class SellServiceImpl implements SellService {
 
     @Autowired
     private PaymentRepository paymentRepository;
-    //SOMA DO CARRINHO , ID DO USUÁRIO
+
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Override
@@ -153,11 +153,27 @@ public class SellServiceImpl implements SellService {
         addressRepository.saveAndFlush(sell.getAddress());
         paymentRepository.saveAndFlush(sell.getPayment());
 
+        populateUserDefaults(sell);
+
         sell.setTotalValue(calculateTotalValue(sell));
 
         sellRepository.saveAndFlush(sell);
 
         return sell.getId();
+    }
+
+    private void populateUserDefaults(Sell sell) {
+        User user = sell.getUser();
+        List<Address> addressList = user.getAddress();
+        addressList.add(sell.getAddress());
+        List<Payment> paymentList = user.getPayment();
+        paymentList.add(sell.getPayment());
+
+        user.setPayment(paymentList);
+        user.setAddress(addressList);
+
+        userRepository.saveAndFlush(user);
+
     }
 
     private double calculateTotalValue(Sell sell) {

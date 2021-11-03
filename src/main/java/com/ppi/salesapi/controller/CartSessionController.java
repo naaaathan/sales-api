@@ -58,6 +58,17 @@ public class CartSessionController {
 
     }
 
+    @PostMapping("/removeProduct/{index}")
+    public void removeProduct(@PathVariable int index, HttpSession session) {
+
+        List<Product> productList = (List<Product>) session.getAttribute("SESSION_PRODUCTS_DATA");
+
+        productList.remove(index);
+
+        session.setAttribute("SESSION_PRODUCTS_DATA", productList);
+
+    }
+
     @PostMapping("/persistPayment")
     public void persistPayment(@RequestBody Payment payment, HttpSession session) {
 
